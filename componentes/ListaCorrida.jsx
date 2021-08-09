@@ -6,140 +6,106 @@ import firebase from '../firebase';
 export default function ListaCorrida({navigation}){
     //     esse state será responsável por escolher a renderização após o carregamento dos dados
     const [loading, setLoading] = useState(true) ;
-    const [state, setState] = useState({
-        status: ''
-    });
-    const [ok, setOk] = useState(false);
-
-    // const [status, setStatus] = useState({
-    //     solicitado: '',
-    //     atribuido: '',
-    //     concluido: '',
-    // })
-
-    const atribuir = () => {
-        console.log(state)
-        setState({
-            ...state, status: false
-        })
-
-     
-        if(state == true) {
-          setState({
-              ...state, status: 'solicitado'
-          })
-      } else if(state == false){
-          setState({
-              ...state, status: 'atribuido'
-          })
-      } else{
-          setState({
-              ...state, status: 'concluido'
-          })
-      }
-    } 
-  
-    // const [calculaImc, setCalculaImc] = useState({
-    //     peso: '',
-    //     altura: '',
-    //     resultado: ''
-        
-    // })
-
-    // const calcular = () => {
-
-    //     const temp = (calculaImc.peso / (calculaImc.altura * calculaImc.altura )).toFixed(2);
-           
-    //     if(temp <=  18.4 ) {
-    //         setCalculaImc({
-    //             ...calculaImc, resultado: ` ${temp} Abaixo do peso - Indivíduo com Fadiga, Strees, Ansiedade.`
-    //         })
-    //     } else if(temp >= 18.5 && temp <=  24.9 ) {
-    //         setCalculaImc({
-    //             ...calculaImc, resultado: `${temp} - Peso normal - Indivíduo com menor risco de doenças cardíacas e vasculares`
-    //         })
-    //     } else {
-    //         setCalculaImc({
-    //             ...calculaImc, resultado: `${temp} - Acima do peso - Fadiga, má circulação, varizes.`
-    //         })
-    //     }  
-    // }
-
-
-
+    const [state, setState] = useState([]);
+    const [state2, setState2] = useState([]);
+       
+    
     useEffect(
         ()=> {
             navigation.addListener(
-                'focus', ()=>pegaDados()
-            )
+                'focus', ()=>pegaDados(), ()=>pegaMotoristas()
+                )
         },[]
-    )
-
-   
-    
-    const pegaDados = async () => {
-        const users = firebase.db.collection("viagens");
-        const querySnapShot = await users.get();
-        const dados = querySnapShot.docs;
-        
-
-        const listaCorridas = [];
-
-        dados.forEach(
-            doc => {
-                listaCorridas.push({
-                    ...doc.data(),
-                    key: doc.id,
-                })
-               
-            }
         )
-
-        setState(listaCorridas);
-        setLoading(false);        
-    }
-    console.log('dados', state)
+        
+    const pegaMotoristas = async () => {
+        const users2 = firebase.db.collection("motoTaxista");
+        const querySnapShot = await users2.get();
+        const dados2 = querySnapShot.docs;
+        
+        
+        const listMotorista = [];
+        
+        dados2.forEach(
+            doc => {
+                listMotorista.push({
+                    ...doc.data(),
+                })
+                
+            }
+            )
+            setState2(listMotorista);
+            setLoading(false);        
+        }
+        console.log(state2)
         
 
-    if(loading){
-        return <ActivityIndicator animating={true} size="large" color='#FEA82F'
-         />
-
-    }
-    
-    return(
-            <ScrollView>
-        <View style={styles.container}>
+       
+        
+        
+        
+        const pegaDados = async () => {
+            const users = firebase.db.collection("viagens");
+            const querySnapShot = await users.get();
+            const dados = querySnapShot.docs;
             
-            <View style={styles.viewLogo}>
-
-            <Image
-            style={styles.logo} 
-            source={require('./cooperativa2.png')}/>
-
-            </View>
-
-            <Text style={styles.viewText}> Lista de Motoristas </Text>
-            {/* <Button title="Adicionar Motorista" 
-             onPress = { () => {setLoading(false); navigation.navigate('Cadastro')}}
-             /> */}
-
-            <FlatList
-            data={state}
-            renderItem={
-                ({item})=>(
-            <View >
-               <Text style={styles.dados}>Cliente: {item.cliente}</Text>
-               <Text style={styles.dados}>Origem: {item.origem}</Text>
-               <Text style={styles.dados}>Destino: {item.destino}</Text>
-               <Text style={styles.dados}>Data: {item.data}</Text>
-               <Text style={styles.dados}>Hora: {item.hora}</Text>
-               <Text style={styles.dados}>Id cliente: {item.keycliente}</Text>
-               <Text style={styles.dados}>Status: {item.status}</Text>
-
-               <TouchableOpacity style={styles.btnSubmit} onPress={atribuir}>
-                <Text style={styles.txt}>Atribuir viagem</Text>
-            </TouchableOpacity>
+            
+            const listaCorridas = [];
+            
+            dados.forEach(
+                doc => {
+                    listaCorridas.push({
+                        ...doc.data(),
+                    })
+                    
+                }
+                )
+                setState(listaCorridas);
+                setLoading(false);    
+            }
+            // console.log(state)    
+            // console.log('dados', state)
+            // console.log(state2)
+            
+            
+            if(loading){
+                return <ActivityIndicator animating={true} size="large" color='#FEA82F'/>
+            }
+            
+           
+                return(
+                    <ScrollView>
+                    <View style={styles.container}>
+                    
+                    <View style={styles.viewLogo}>
+                    <Image
+                    style={styles.logo} 
+                    source={require('./cooperativa2.png')}/>
+                    </View>
+        
+                    <Text style={styles.viewText}> Lista de Corridas </Text>
+                    <FlatList
+                    data={state}
+                    renderItem={
+                        ({item})=>(
+                    <View >
+                       {/* <Text style={styles.dados}>Cliente: {item.cliente}</Text> */}
+                       <Text style={styles.dados}>Origem: {item.origem.nome}</Text>
+                       <Text style={styles.dados}>Destino: {item.destino.nome}</Text>
+                       <Text style={styles.dados}>Data: {item.data}</Text>
+                       <Text style={styles.dados}>Hora: {item.hora}</Text>
+                       <Text style={styles.dados}>Preço: {item.preco}</Text>
+                       <Text style={styles.dados}>Id cliente: {item.keycliente}</Text>
+                       <Text style={styles.dados}>Status: {item.status}</Text>
+                       <TouchableOpacity style={styles.btnSubmit} onPress={()=> 
+                            <FlatList
+                            data={state2}
+                            renderItem={({ item }) => <Text>{item.nomeMotorista}</Text>}
+                        
+                        />
+                            }>
+                        <Text style={styles.txt}>Atribuir viagem</Text>
+                    </TouchableOpacity>
 
             {/* onPress={()=> navigation.navigate('Atualizar',item.key)}> */}
               
@@ -150,8 +116,10 @@ export default function ListaCorrida({navigation}){
     
         </View>
         </ScrollView>
-    )
+        )
 }
+
+
 
 const styles = StyleSheet.create({
     container:{

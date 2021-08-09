@@ -23,7 +23,7 @@ export default function Deletar({route, navigation}){
   }
     
     if(ok){     
-        navigation.popToTop();
+        navigation.goBack();
     }
 
     return(

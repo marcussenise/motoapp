@@ -83,17 +83,17 @@ export default function Cadastro({navigation}){
     
         }).then(
             ()=>{
-                alert("salved");
+                alert("Motorista cadastrado.");
                 
                 setOk(true);
             }
         ).catch(
-            ()=>alert("não foi possivel inserir")
+            ()=>alert("Não foi possivel inserir.")
         )
     }
     
     if(ok){
-        navigation.popToTop();
+        navigation.goBack();
     }
 
     

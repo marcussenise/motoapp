@@ -7,6 +7,7 @@ export default function ListaMotorista({navigation}){
     //     esse state será responsável por escolher a renderização após o carregamento dos dados
     const [loading, setLoading] = useState(true) ;
     const [state, setState] = useState([]);
+
     // const [motorista,setMotorista] = useState([]);
 
     useEffect(
@@ -48,30 +49,30 @@ export default function ListaMotorista({navigation}){
     }
     console.log('dados', state)
     
-    // const pegaMotorista = async () => {
-    //     const motorista = firebase.db.collection("motoTaxista");
-    //     const querySnapShot = await motorista.get();
-    //     const dados = querySnapShot.docs;
+    const pegaMotorista = async () => {
+        const motorista = firebase.db.collection("motoTaxista");
+        const querySnapShot = await motorista.get();
+        const dados = querySnapShot.docs;
         
 
-    //     const listMotorista = [];
+        const listMotorista = [];
 
-    //     dados.forEach(
-    //         doc => {
-    //             listMotorista.push({
-    //                 ...doc.data(),
-    //                 key: doc.id,
-    //             })
+        dados.forEach(
+            doc => {
+                listMotorista.push({
+                    ...doc.data(),
+                    key: doc.id,
+                })
                 
-    //         }
-    //     )
+            }
+        )
         
 
-    //     setMotorista(listMotorista);
-    //     setLoading(false);   
+        setMotorista(listMotorista);
+        setLoading(false);   
         
-    //     console.log('dados',listMotorista)
-    // }
+        console.log('dados',listMotorista)
+    }
         
 
     if(loading){
@@ -106,7 +107,7 @@ export default function ListaMotorista({navigation}){
                <Text style={styles.dados}>cpf: {item.cpf}</Text>
                <Text style={styles.dados}>Endereço: {item.endereco}</Text>
                <Text style={styles.dados}>Cnh: {item.cnh}</Text>
-               <Text style={styles.dados}>Liçença: {item.licenca}</Text>
+               <Text style={styles.dados}>Licença: {item.licenca}</Text>
                <Text style={styles.dados}>Modelo da Moto: {item.modeloMoto}</Text>
                <Text style={styles.dados}>Placa: {item.placa}</Text>
                <Text style={styles.dados}>Cor: {item.cor}</Text>

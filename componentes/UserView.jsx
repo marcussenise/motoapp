@@ -12,9 +12,6 @@ export default function UserView({tchau}){
         const auth = firebase.auth;
         await auth.signOut();
         tchau()
-        //navigation.popToTop();
-        // deslogado();
-
     }
 
     if(userView){
@@ -22,7 +19,7 @@ export default function UserView({tchau}){
             <View style={styles.container}>
               
                 <Text style={styles.txt}>Usuário {user.email}</Text>
-                <TouchableOpacity style={styles.btnSubmit} onPress={{logout}}>
+                <TouchableOpacity style={styles.btnSubmit} onPress={logout}>
                 <Text style={styles.txt}>Logout</Text>
                 </TouchableOpacity>
                 <Text onPress={() => setUserView(false)} style={styles.txt}>Ocultar</Text>

@@ -62,8 +62,7 @@ export default function Atualizar({route, navigation}){
   }
    
     if(ok){
-        
-        navigation.popToTop();
+        navigation.goBack();
     }
 
     return(
